@@ -33,6 +33,27 @@ Thumbs.db
 *.docx
 *.pdf
 
+# Hu 2018 verification temporary files
+FIG6_GEOMETRY_SUMMARY.txt
+HU2018_VERIFICATION_GUIDE.md
+VERIFICATION_QUICK_SUMMARY.txt
+VERIFICATION_SUMMARY.txt
+display_cases.py
+extract_fig6_cases.py
+fig6c_pin_cases.csv
+fig6d_fixed_cases.csv
+hu2018_fig6_cases_fixed.csv
+hu2018_fig6_cases_pin.csv
+hu2018_fig6_template.png
+hu2018_theoretical_fixed.csv
+hu2018_theoretical_pin.csv
+prepare_hu2018_verification.py
+print_summary.py
+response_to_reviewers.md
+revision_plan.md
+run_verification_hu2018.py
+verify_hu2018_fig6.py
+
 # Validation cases (Hu 2018 benchmark)
 hu_4cases_validation/
 

@@ -155,10 +155,14 @@ python Code/Summarize.py                # Generates multi-model comparison table
 ### Dataset Generation
 
 ```bash
-python Code/LHS_AnsysBatch.py           # Latin Hypercube Sampling, 20,000 samples
+python Code/AnsysBatch_V1_FGM.py        # V1: Random uniform, 500 samples, 10-layer FGM
+python Code/AnsysBatch_V2_FGM.py        # V2: LHS, independent λ, 10-layer FGM
 ```
 
-Parameters: 9-dimensional LHS covering geometric (L, f/L, b/h, λ), material (E, ρ, μ), and boundary (η) ranges.
+V1 parameters (independent, uniform):
+Geometry: L ∈ [0.5,3], f/L = 1/x (x∈[3,13]), b/h ∈ [3,20], λ ∈ [65,500]
+Material: E ∈ [60,210] GPa, ρ ∈ [2.7,8] g/cm³, μ ∈ [0.2,0.4]
+Boundary: KX,KY ∈ [0.1,10], KZ ∈ [0.1,1000]
 
 ### Mesh Convergence Study
 
@@ -178,7 +182,9 @@ Runs modal analysis on a representative arch at 7 mesh densities (10–640 eleme
 python Code/ParamSensitivity.py
 ```
 
-Uses trained FA-LSTM as surrogate to sweep each of the 16 design parameters individually. Output: `results/sensitivity/sensitivity_*.csv`.
+Uses trained FA-LSTM as surrogate to sweep 7 independent physical parameters.
+Outputs both dimensionless q_cr and dimensional P_cr (N).
+Output: `results/sensitivity_v2/sensitivity_*.csv`.
 
 ### Attention Weights
 
