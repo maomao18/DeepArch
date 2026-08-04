@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "D:\tanghao\deeparch_review\print_summary.py", line 220, in <module>
+    print(__doc__)
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2705' in position 224: illegal multibyte sequence

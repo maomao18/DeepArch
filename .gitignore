@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Model weights & checkpoints (too large)
+models/
+*.pth
+*.pkl
+*.pt
+
+# Training logs
+logs/
+*.log
+
+# Results — exclude generated outputs, keep analysis artefacts
+results/
+!results/attention/
+!results/sensitivity/
+!results/sensitivity_v2/
+!results/summary/
+!results/analysis/
+
+# IDE & tools
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large binaries
+*.docx
+*.pdf
+
+# Validation cases (Hu 2018 benchmark)
+hu_4cases_validation/
+
+# ANSYS binary output files
+*.esav
+*.full
+*.mlv
+*.r*
+*.mode
+*.emat
+
+# Conda environment
+*.egg-info/

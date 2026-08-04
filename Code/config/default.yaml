@@ -1,0 +1,62 @@
+# DeepArches Default Configuration / DeepArches 默认配置
+# ========================================================
+# This file contains default hyperparameters for training.
+# 此文件包含训练的默认超参数。
+
+# Data Configuration / 数据配置
+data:
+  data_dir: "./Data/Train"
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  sequence_length: 200
+  fixed_features_dim: 16
+  dynamic_features_dim: 43
+
+# Model Configuration / 模型配置
+model:
+  hidden_size: 384
+  num_layers: 3
+  num_heads: 8
+  dropout: 0.2
+  use_feature_mhsa: true
+  use_attn_pool: true
+  use_film: true
+  film_hidden: 128
+  use_state_residual: true
+  state_residual_hidden: 128
+
+# Training Configuration / 训练配置
+training:
+  epochs: 100
+  batch_size: 16
+  learning_rate: 1.0e-4
+  weight_decay: 1.0e-4
+  grad_clip_norm: 1.0
+  early_stopping_patience: 50
+  teacher_forcing_epochs: 40
+  transition_epochs: 40
+  use_amp: true
+
+# Loss Weights / 损失权重
+loss:
+  load_weight: 0.5
+  displacement_weight: 0.5
+  w_delta: 0.5
+  w_abs: 0.5
+
+# Buckling Extraction Configuration / 屈曲提取配置
+buckling:
+  node: 11
+  axis: "y"
+  method: "stiffness_drop"
+  slope_threshold: 0.0
+  smooth: true
+  smooth_window: 7
+  min_index: 5
+
+# Random Seed / 随机种子
+seed: 618
+
+# Device / 设备
+device: "cuda"
