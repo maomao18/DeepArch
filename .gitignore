@@ -29,6 +29,11 @@ results/*
 .DS_Store
 Thumbs.db
 
+# Data — only Train/ and Test/ are tracked
+Data/Hu_validation/
+Data/speedx*/
+Data/疑似分岔屈曲/
+
 # Large binaries
 *.docx
 *.pdf
