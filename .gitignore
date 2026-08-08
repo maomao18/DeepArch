@@ -16,6 +16,7 @@ results/
 # IDE & tools
 .vscode/
 .idea/
+CLAUDE.md
 
 # OS files
 .DS_Store
