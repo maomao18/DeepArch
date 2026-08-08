@@ -462,6 +462,87 @@ def run():
         print(f"  {r['f_L_label']:>8s}  {r['P_cr_min_N']:>12.1f} → {r['P_cr_max_N']:<12.1f}  "
               f"{r['P_sensitivity_pct']:>7.1f}%  {r['q_sensitivity_pct']:>7.2f}%")
 
+    # =========================================================================
+    # Multi-E L sweep: same L sweep at different Young's moduli
+    #   E = 60, 120, 210 GPa
+    # Shows how the L–P_cr relationship depends on material stiffness.
+    # =========================================================================
+    E_cases = [
+        (60e9,  "60 GPa",  "low"),
+        (120e9, "120 GPa", "mid"),
+        (210e9, "210 GPa", "high"),
+    ]
+    L_values = np.linspace(0.5, 3.0, N_POINTS)
+
+    print(f"\n{'='*70}")
+    print(f"Multi-E L sweep: L sensitivity at 3 Young's moduli")
+    print(f"{'='*70}")
+
+    multi_L_results = {}
+
+    for E_val, E_label, E_desc in E_cases:
+        q_cr_vals = []
+        P_cr_vals = []
+
+        print(f"\n  E = {E_label} ({E_desc}) — L = {L_values[0]:.2f} → {L_values[-1]:.2f} m")
+
+        for L_val in L_values:
+            bl = Baseline()
+            bl.E = E_val
+            bl.L = L_val
+            features = bl.compute_features()
+
+            D11 = features[3]
+            L_f = features[4]
+            b_f = features[6]
+
+            features_std = fixed_scaler.transform(features.reshape(1, -1))
+            fixed_t = torch.tensor(features_std, dtype=torch.float32, device=DEVICE)
+
+            pred_std = infer(model, fixed_t, x0, A, B_coef)
+            pred_phys = abs_scaler.inverse_transform(pred_std)
+
+            q_cr = extract_q_cr(pred_phys)
+            q_cr_vals.append(q_cr)
+            P_cr = q_cr * D11 / (b_f * L_f * L_f)
+            P_cr_vals.append(P_cr)
+
+        # Save CSV
+        df = pd.DataFrame({
+            "L_m": L_values,
+            "q_cr": q_cr_vals,
+            "P_cr_N": P_cr_vals,
+        })
+        E_key = E_label.replace(" ", "_").replace("GPa", "GPa")
+        csv_path = os.path.join(OUTPUT_DIR, f"sensitivity_L_E_{E_key}.csv")
+        df.to_csv(csv_path, index=False)
+
+        q_min, q_max = min(q_cr_vals), max(q_cr_vals)
+        q_sens = (q_max - q_min) / (q_max + 1e-9) * 100
+        q_trend = "↑" if q_cr_vals[-1] > q_cr_vals[0] else "↓"
+        P_min, P_max = min(P_cr_vals), max(P_cr_vals)
+        P_sens = (P_max - P_min) / (P_max + 1e-9) * 100
+        P_trend = "↑" if P_cr_vals[-1] > P_cr_vals[0] else "↓"
+
+        print(f"    q_cr: {q_min:.2f} → {q_max:.2f}  ({q_trend} {q_sens:.1f}%)")
+        print(f"    P_cr: {P_min:.0f} → {P_max:.0f} N  ({P_trend} {P_sens:.1f}%)")
+
+        multi_L_results[E_label] = {
+            "E": E_val, "E_label": E_label,
+            "q_cr_min": q_min, "q_cr_max": q_max,
+            "q_sensitivity_pct": q_sens,
+            "P_cr_min_N": P_min, "P_cr_max_N": P_max,
+            "P_sensitivity_pct": P_sens,
+        }
+
+    # Multi-E L summary
+    print(f"\n  --- Multi-E L sweep summary ---")
+    print(f"  {'E':>10s}  {'P_cr range (N)':>30s}  {'Δ% (P)':>8s}  {'Δ% (q)':>8s}")
+    print(f"  {'-'*10}  {'-'*30}  {'-'*8}  {'-'*8}")
+    for key, r in multi_L_results.items():
+        print(f"  {r['E_label']:>10s}  {r['P_cr_min_N']:>12.0f} → {r['P_cr_max_N']:<12.0f}  "
+              f"{r['P_sensitivity_pct']:>7.1f}%  {r['q_sensitivity_pct']:>7.1f}%")
+
     # Save dimensionless summary
     summary_q = pd.DataFrame({
         "label": [v["label"] for v in all_results.values()],
