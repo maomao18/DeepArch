@@ -18,6 +18,10 @@ results/
 .idea/
 CLAUDE.md
 
+# Internal docs
+docs/superpowers/
+docs/manuscript.md
+
 # OS files
 .DS_Store
 Thumbs.db
