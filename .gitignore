@@ -9,17 +9,9 @@ models/
 *.pkl
 *.pt
 
-# Training logs
+# Generated outputs
 logs/
-*.log
-
-# Results — exclude generated outputs, keep analysis artefacts
-results/*
-!results/attention/
-!results/sensitivity/
-!results/sensitivity_v2/
-!results/summary/
-!results/analysis/
+results/
 
 # IDE & tools
 .vscode/
