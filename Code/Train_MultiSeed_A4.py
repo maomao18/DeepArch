@@ -41,8 +41,8 @@ V2F_CONFIG = dict(
     learning_rate=0.0003047769777136961,
     weight_decay=3.0038179351735502e-05,
     grad_clip_norm=3.2194295706771046,
-    batch_size=16, epochs=100,
-    teacher_forcing_epochs=100, transition_epochs=0,
+    batch_size=16, epochs=150,
+    teacher_forcing_epochs=40, transition_epochs=40,
     w_delta=0.43537859299214776, w_abs=0.5646214070078522,
     load_weight=0.20875198842657713, displacement_weight=0.7912480115734228,
     # ── A4: w/o Prior MLP ──
